@@ -7,6 +7,8 @@ body {
     font-size: 13px;
   }
 
+.gray {color: gray}
+
 p {width: 500px;
   font-size: 13px}
 .margin {margin-bottom: 15px;}
@@ -14,8 +16,6 @@ p {width: 500px;
 li {width: 500px;
   font-size: 13px;
 }
-
-.gray {color: gray}
 
 pre {
   white-space: 0px;
