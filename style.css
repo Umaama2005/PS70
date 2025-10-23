@@ -20,7 +20,6 @@ li {width: 500px;
 pre {
   white-space: 0px;
   margin-top: 0px;
-  line-height: 1.0;
   margin-bottom: 0px;
   width: 500px;
   font-size: 13px
@@ -29,6 +28,7 @@ pre {
 code {
   white-space: 0px;
   margin-top: 0px;
+  line-height: 1.0;
   margin-bottom: 0px;
   width: 500px;
 }
