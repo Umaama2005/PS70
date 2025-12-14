@@ -38,9 +38,7 @@
     <p>
       overall, i think my final project, the nosehouse, turned out well! i was able to get all the circuitry done and implemented, as well as good cable management, while still allowing the model to be modular through the use of the wire connectors. i also implemented the iot features through influxdb and a websocket, which will be really helpful also in the future to remotely control the model and get readings. the only place i felt like i was not able to do everything i wanted was with the designs for the exchanger's internal inserts. i made a sizer to adjust the volume, and some examples of organic molds which was great, but i was not able to make a ceramic mold with the fluid flow that i had planned initially, though maybe that was too ambitious. below is my final video!
     </p>
-    <iframe width="420" height="315"
-      src="https://youtu.be/hv7EidBP3j4">
-    </iframe>
+    <iframe width="500" height="315" src="https://www.youtube.com/embed/hv7EidBP3j4?si=C-BOZanseQuLmPS5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
   </div>
 
   <div>
@@ -96,6 +94,8 @@
       i made a 3d model of my exchangers and the cooler with the cut outs. i inserted the aluminum plates as well with the cut outs for the sensors in the exchangers:
     </p>
     <iframe src="https://college974.autodesk360.com/shares/public/SH28cd1QT2badd0ea72bbd09a58c41faab15?mode=embed" width="500" height="480" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+    <p>
+    </p>
     <iframe src="https://college974.autodesk360.com/shares/public/SH28cd1QT2badd0ea72b759fec2cb726ae4f?mode=embed" width="500" height="480" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
     <p>
       i wanted to create something that allowed me to control the volume of air entering the exchangers, so i designed a "sizer" which is just a sort of comb of plywood sheet that you can insert between the aluminum plates:
@@ -106,7 +106,7 @@
     <p>
       for the exchanger inserts i made a mold modeled after the internal morphology of a reindeer's nasal turbinates. i found images from <a href='https://www.researchgate.net/figure/Cross-sectional-images-of-the-nasal-turbinate-structures-from-the-maxilloturbinal-region_fig1_341632787'> this research paper </a>, and then i imported them as svgs into fusion, and created the molds out of them. 
     </p>
-    <iframe src="https://college974.autodesk360.com/shares/public/SH28cd1QT2badd0ea72bb4a97ee9c8a60ae0?mode=embed" width="640" height="480" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+    <iframe src="https://college974.autodesk360.com/shares/public/SH28cd1QT2badd0ea72bb4a97ee9c8a60ae0?mode=embed" width="500" height="480" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
     <p>
       the print time was almost 14 hours on the 3d printer, and was also constrained by the height of the 3d printer, so i was not able to print many, but i printed 2 molds. 
     </p>
@@ -116,7 +116,7 @@
     <p>
       i also made other example molds using cross-sections of the nose with varying complexity, and printed those too as examples of different designs. 
     </p>
-    <iframe src="https://college974.autodesk360.com/shares/public/SH28cd1QT2badd0ea72b647bb4ce73d7355a?mode=embed" width="640" height="480" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+    <iframe src="https://college974.autodesk360.com/shares/public/SH28cd1QT2badd0ea72b647bb4ce73d7355a?mode=embed" width="500" height="480" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
     <p>
       i filled my big molds with silicone, because i found out that silicone's heat capacity is pretty good, so it would be a good substitute to the aluminum plates. removing the silicone from the molds was absolutely terrible work, and i must have used about 10 different power tools and hand tools, but the mold finally came off, and the silicone held the shape really really well, so i was quite happy with the result! you can <a href='https://umaama2005.github.io/PS70/weeks/final/files' download >download all my fusion files here.</a>
     </p>
@@ -130,7 +130,7 @@
 # ---------------------------------
     </pre>
     <p>
-      i combined my codes from <a href="https://umaama2005.github.io/PS70/weeks/week4/4.html">week 4</a> and <a href="https://umaama2005.github.io/PS70/weeks/week6/6.html">week 6</a> for the sensors and relays with my code from <a href="https://umaama2005.github.io/PS70/weeks/week9/9.html">week 9</a> with the iot features, and used chatgpt to help integrate the codes, and debug. you can <a href='https://umaama2005.github.io/PS70/weeks/final/final_project_code' download > download my final code here</a>. below is the code too:
+      i combined my codes from <a href="https://umaama2005.github.io/PS70/weeks/week4/4.html">week 4</a> and <a href="https://umaama2005.github.io/PS70/weeks/week6/6.html">week 6</a> for the sensors and relays with my code from <a href="https://umaama2005.github.io/PS70/weeks/week9/9.html">week 9</a> with the iot features, and used chatgpt to help integrate the codes, and debug. you can <a href='https://umaama2005.github.io/PS70/weeks/final/final_project_code.ino' download > download my final code here</a>. below is the code too:
     </p>
     <pre><code class="language-arduino">
       #include "DHT.h"
