@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <title>umaama hussain's ps70 documentation</title>
+  <title>umaama hussain</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"> 
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
@@ -14,34 +15,385 @@
 <body bgcolor=#000000>
   <div>
     <pre>
-      <nav class="navbar navbar-expand-sm navbar-light bg-light">
-        <div style="align-items: left; justify-content:left;" class="container-fluid">
-          <h3 class="nav-title"> week 10 </h3>
-          <div class="navbar-nav">
-            <h4></h4>
-            <h4><a href="https://umaama2005.github.io/PS70/index.html">back to home</a></h4>
-            <h4><a href="https://umaama2005.github.io/PS70/about.html">back to about</a></h4>
-          </div>
-        </div>
-      </nav>
+      <a href="https://umaama2005.github.io/PS70/">back to home</a> 
+    </pre>
+    <pre>
+      <a href="https://umaama2005.github.io/PS70/about.html">back to about</a>
     </pre>
   </div>
 
   <div>
     <pre style="color:gray">
-# drawing machine
+      /week 10
+    </pre>
+  </div>
+ 
+
+  <div>
+    <pre style="color:gray">
+# drawing machine mechanics
     </pre>
     <pre style="color:gray">
 # ---------------------------------
     </pre>
-    <pre>
-      disc
-    </pre>
     <p>
-      <img src="iot.gif" width="500">
+      We decided to stick close to the example plotter shown to us in class, and stuck mostly to the kit of parts. our plotter had 2 stepper motors and one servo for the end effector, and 2 belts for the x-y motion mounted onto two metal rails, with 3d printed structural parts. the two stepper motors acted as the pulleys for the belt systems. we ran into a lot of issues with belt tension and also just the mechanics, and ensuring that everything was structurally secure but clean enough to allow full movement. for the end effector, one late night in the lab, we decided to use a paint brush along with the canvas element on the websocket to make - pixelcasso!
+    </p>
+    <p>
+      <img src="paint.jpeg" width="500">
+    </p> 
+    <p>
+      a board was cnc'd to rest the machine and paper on, and also have little pots to put the paint on, all within the movement area of the machine. homing switches were added to the end of the two rails so that when the motors hit them, they would stop their movement. 
+    </p>
+    <p>
+      <img src="final.gif" width="500">
+    </p>
+    <p>
+      here are snippets of our homing code:
     </p>
     <pre><code class="language-arduino">
+      long homeAxisNegative(AccelStepper& m, uint8_t pin) {
+        m.setMaxSpeed(HOMING_SPEED);
+        m.setAcceleration(HOMING_ACCEL);
+        if (digitalRead(pin) == LOW) { // already on switch
+          m.setCurrentPosition(0);
+          return 0;
+        }
+        m.moveTo(FAR_TARGET);
+        while (digitalRead(pin) == HIGH) { m.run(); }
+        m.stop();
+        while (m.run()) {}
+        
+        long stepsMoved = -m.currentPosition();
+        m.setCurrentPosition(0);
+        return stepsMoved;
+      }
+
+      void homeMachine() {
+        Serial.println("=== HOMING START ===");
+        long xs = homeAxisNegative(stepperX, X_ZERO_PIN);
+        long ys = homeAxisNegative(stepperY, Y_ZERO_PIN);
+        Serial.print("X steps to zero: "); Serial.println(xs);
+        Serial.print("Y steps to zero: "); Serial.println(ys);
+        Serial.println("=== HOMING DONE ===");
+      }
     </code></pre>
+  </div>
+
+  <div>
+    <pre style="color:gray">
+# drawing machine electronics
+    </pre>
+    <pre style="color:gray">
+# ---------------------------------
+    </pre>
+    <p>
+      we adapted the websockets code and real-time drawing from HTML canvas element given to us to write our code. we had to figure out how to translate the steps the motor takes with the distance it actually moves, and then how that would correspond to the pixels on the canvas element, so that we could have drawings that fit the scale of the machine's actual area. 
+    </p>
+    <p>
+      these were the scaling constants we used:
+    </p>
+    <pre><code class="language-arduino">
+      // scaling constants
+      #define stepsPerMmX  5.56
+      #define stepsPerMmY  3.57
+
+      #define XReal 120 // mm span corresponding to canvas width
+      #define YReal 270 // mm span corresponding to canvas height
+
+      #define canvasW 400
+      #define canvasH 550
+
+      #define scaleX (float(XReal) / float(canvasW))  // mm per pixel
+      #define scaleY (float(YReal) / float(canvasH))  // mm per pixel
+    </code></pre>
+    <p>
+      we also found that the end effector was only moving to points instead of following a smooth line, so we used chatgpt to help us implement smoothing. 
+    </p>
+    <pre><code class="language-arduino">
+      void linearMoveSteps(long targetX, long targetY, float feed_steps_per_s = FEED_STEPS_PER_SEC, float accel_steps_per_s2 = ACCEL_STEPS_PER_SEC2) {
+        long dx = targetX - curXSteps;
+        long dy = targetY - curYSteps;
+        long absdx = labs(dx);
+        long absdy = labs(dy);
+        long lenSteps = (long) sqrt((double)absdx * absdx + (double)absdy * absdy);
+
+        if (lenSteps == 0) return;
+        
+        float vx = (absdx ? feed_steps_per_s * (float)absdx / (float)lenSteps : 0.0f);
+        float vy = (absdy ? feed_steps_per_s * (float)absdy / (float)lenSteps : 0.0f);
+        float ax = (absdx ? accel_steps_per_s2 * (float)absdx / (float)lenSteps : 0.0f);
+        float ay = (absdy ? accel_steps_per_s2 * (float)absdy / (float)lenSteps : 0.0f);
+        
+        stepperX.setMaxSpeed(vx);
+        stepperY.setMaxSpeed(vy);
+
+        stepperX.setAcceleration(ax);
+        stepperY.setAcceleration(ay);
+        
+        stepperX.moveTo(targetX);
+        stepperY.moveTo(targetY);
+        
+        while (stepperX.distanceToGo() != 0 || stepperY.distanceToGo() != 0) {
+          stepperX.run();
+          stepperY.run();
+        }
+        
+        curXSteps = targetX;
+        curYSteps = targetY;
+      }
+      .
+      .
+      .
+      if (msg.startsWith("SEG:")) {
+        int c1 = msg.indexOf(',', 4);
+        int c2 = (c1 == -1) ? -1 : msg.indexOf(',', c1 + 1);
+        
+        if (c1 != -1 && c2 != -1) {
+          long px  = msg.substring(4, c1).toInt();
+          long py  = msg.substring(c1 + 1, c2).toInt();
+          int  pen = msg.substring(c2 + 1).toInt();
+          
+          // set pen based on this segment type
+          penServo.write(pen ? penDownAngle : penUpAngle);
+          
+          // convert pixel -> mm -> steps
+          float mmX = px * scaleX;
+          float mmY = py * scaleY;
+          long targetX = lround(mmX * stepsPerMmX);
+          long targetY = lround(mmY * stepsPerMmY);
+          
+          linearMoveSteps(targetX, targetY);  // execute immediately
+          
+          // let browser send the next point
+          sendOK();
+          return;
+          }
+        }
+      }
+    </code></pre>
+    <p>
+      <img src="screen.gif" width="500">
+    </p>
+    <p>
+      we then also used chatgpt to combine the html, machine code, and drawing code, as 3 different members of the team had worked on each. overall the code implemented quite well! however, there were some issues with memory, and the machine could not handle drawings that had a large area or that were too complex. the code to include the paint squares on the physical board on the canvas element also did not work out, so one of our members had to memorize where the spot was on the canvas element for our demo.
+    </p>
+    <p>
+      <img src="star.gif" width="500">
+    </p>
+    <p>
+      this was our html code:
+    </p>
+    <pre><code class="language-arduino">
+      const char index_html[] PROGMEM = R"rawliteral(
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Pixelcasso</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+  body {
+    margin: 16px;
+    font-family: system-ui, Arial;
+  }
+
+  h2 {
+    background: white;
+    padding: 6px;
+    border: 2px solid black;
+    text-align: center;
+    border-radius: 5px;
+  }
+
+  .row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  button {
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+
+  #canvas {
+    border: 2px solid black;
+    background: white;
+    display: block;
+    margin: auto;
+    touch-action: none;
+  }
+
+  .switch {
+    background: white;
+    padding: 4px 8px;
+    border: 2px solid black;
+    border-radius: 5px;
+  }
+</style>
+</head>
+
+<body>
+
+<h2>Help Pixelcasso Find Its Inspiration!</h2>
+
+<div class="row">
+  <button id="homeBtn">Home</button>
+  <button id="clearBtn">Clear</button>
+  <button id="drawBtn">Draw</button>
+
+  <label class="switch">
+    <input id="penToggle" type="checkbox">
+    <span>Pen Down</span>
+  </label>
+</div>
+
+<canvas id="canvas" width="550" height="400"></canvas>
+
+<script>
+
+/* WebSocket */
+let ws;
+const gateway = `ws://${window.location.hostname}/ws`;
+
+function initWebSocket() {
+  ws = new WebSocket(gateway);
+  ws.onopen = () => console.log("WS connected");
+  ws.onclose = () => {
+    console.log("WS closed, retrying...");
+    setTimeout(initWebSocket, 2000);
+  };
+  ws.onmessage = (e) => console.log("Message:", e.data);
+}
+window.addEventListener("load", initWebSocket);
+
+/* Canvas setup */
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+ctx.lineWidth = 2;
+ctx.strokeStyle = "blue";
+ctx.lineCap = "round";
+ctx.lineJoin = "round";
+
+/* Paint pots */
+function drawColorSquares() {
+  ctx.strokeStyle = "black";
+
+  // Red square
+  ctx.strokeRect(10,10, 25,25);
+  ctx.fillStyle = "red";
+  ctx.fillRect(10,10, 25,25);
+
+  // Blue square
+  ctx.strokeRect(10,45, 25,25);
+  ctx.fillStyle = "blue";
+  ctx.fillRect(10,45, 25,25);
+}
+drawColorSquares();
+
+/* Drawing Logic */
+let drawing = false;
+let lastX = 0, lastY = 0;
+
+/* Manual pen toggle */
+let manualPen = 0;
+document.getElementById("penToggle").addEventListener("change", e => {
+  manualPen = e.target.checked ? 1 : 0;
+});
+
+/* Path data */
+let path = [];
+const MIN_DIST = 2;
+
+function sendPoint(x, y, p) {
+  if (ws && ws.readyState === 1)
+    ws.send(`${x}&${y}-${p}`);
+}
+
+function addPoint(x, y, p) {
+  if (path.length) {
+    const dx = x - path[path.length - 1].x;
+    const dy = y - path[path.length - 1].y;
+    if (dx*dx + dy*dy < MIN_DIST*MIN_DIST && p === path[path.length - 1].p)
+      return;
+  }
+  path.push({x,y,p});
+  sendPoint(x, y, p);
+}
+
+function pointerDown(x, y) {
+  drawing = true;
+  lastX = x; lastY = y;
+
+  const pen = manualPen ? 1 : 0;  // manual override for pen-up/down
+  addPoint(x, y, pen);
+
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+}
+
+function pointerMove(x, y) {
+  if (!drawing) return;
+
+  ctx.lineTo(x, y);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+
+  const pen = manualPen ? 1 : 1;  // dragging always draws
+  addPoint(x, y, pen);
+
+  lastX = x;
+  lastY = y;
+}
+
+function pointerUp() {
+  drawing = false;
+}
+
+/* Canvas Events*/
+canvas.addEventListener("mousedown", e => {
+  const r = canvas.getBoundingClientRect();
+  pointerDown(e.clientX - r.left, e.clientY - r.top);
+});
+canvas.addEventListener("mousemove", e => {
+  const r = canvas.getBoundingClientRect();
+  pointerMove(e.clientX - r.left, e.clientY - r.top);
+});
+canvas.addEventListener("mouseup", pointerUp);
+canvas.addEventListener("mouseleave", pointerUp);
+
+/* Buttons */
+document.getElementById("clearBtn").onclick = () => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawColorSquares();   // redraw the squares after clearing
+  path = [];
+  ws.send("CLEAR");
+};
+
+document.getElementById("homeBtn").onclick = () => {
+  ws.send("HOME");
+};
+
+document.getElementById("drawBtn").onclick = () => {
+  ws.send("DRAW");
+};
+</script>
+
+</body>
+</html>
+)rawliteral";
+
+    </code></pre>
+
+
+
+
+
   </div>
 </body>
 <link rel="stylesheet" href="https://umaama2005.github.io/PS70/style.css">
