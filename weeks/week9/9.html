@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <title>umaama hussain's ps70 documentation</title>
+  <title>umaama hussain</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"> 
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
@@ -14,19 +15,18 @@
 <body bgcolor=#000000>
   <div>
     <pre>
-      <nav class="navbar navbar-expand-sm navbar-light bg-light">
-        <div style="align-items: left; justify-content:left;" class="container-fluid">
-          <h3 class="nav-title"> week 9 </h3>
-          <div class="navbar-nav">
-            <h4></h4>
-            <h4><a href="https://umaama2005.github.io/PS70/index.html">back to home</a></h4>
-            <h4><a href="https://umaama2005.github.io/PS70/about.html">back to about</a></h4>
-          </div>
-        </div>
-      </nav>
+      <a href="https://umaama2005.github.io/PS70/">back to home</a> 
+    </pre>
+    <pre>
+      <a href="https://umaama2005.github.io/PS70/about.html">back to about</a>
     </pre>
   </div>
 
+  <div>
+    <pre style="color:gray">
+      /week 9
+    </pre>
+  </div>
   <div>
     <pre style="color:gray">
 # electronic output devices
@@ -34,11 +34,11 @@
     <pre style="color:gray">
 # ---------------------------------
     </pre>
-    <pre>
-      back in week 7, we made a circuit with various output devices and wrote code to do something with them. i chose the oled screen and found code that shows falling stars across the screen.
-    </pre>
     <p>
-      <img src="iot.gif" width="500">
+      back in week 7, we made a circuit with various output devices and wrote code to do something with them. i chose the oled screen and found code that shows falling stars across the screen.
+    </p>
+    <p>
+      <img src="iot.gif" width="500" height="550">
     </p>
   </div>
 
@@ -49,9 +49,9 @@
     <pre style="color:gray">
 # ---------------------------------
     </pre>
-    <pre>
+    <p>
     	for this assignment, i began working with said, who unfortunately dropped the class - so it was just me. but it was alright because i was planning on using some iot features on my final project! the main thing i wanted to do was to be able to send the data from my sensor readings to a database that i could access from anywhere in the world, at any time. i used <a href="https://randomnerdtutorials.com/esp32-how-to-log-data/"> this article from randomnerdtutorials </a> to help me figure out what method of datalogging would suit my project best. i decided that influxdb would be most suitable because it has an option to visualise your data on the platform itself, and it seemed pretty simple to set up. there was also this really helpful tutorial on <a href="https://randomnerdtutorials.com/esp32-esp8266-sensor-bme280-influxdb/"> sending BME208 sensor readings to influxdb </a>. i simply edited the code that was meant for the BME208 to the code needed for DHT-22 sensors. here is a snippet of the edited version - i used chatgpt to help me integrate the edited code from the tutorial with my main code for my circuits.
-    </pre>
+    </p>
     <pre><code class="language-arduino">
       sensorReadings.addField("T1", t1);
       sensorReadings.addField("T2", t2);
@@ -81,9 +81,9 @@
         Serial.println("Wifi connection lost");
       }
     </code></pre>
-    <pre>
+    <p>
       another thing that i wanted to do was also change the relay interval for the exchanger fans using a websocket, as this is one of the main parameters of the model. i found these two really helpful tutorials on randomnerd, one on <a href="https://randomnerdtutorials.com/esp32-esp8266-thermostat-web-server/">creating a thermostat webserver, </a> and another on <a href="https://randomnerdtutorials.com/esp32-async-web-server-espasyncwebserver-library/">controlling outputs.</a> i combined the structure and layout of the first one with the logic of the second one, so that users could input a value for the new interval for the relays, and submit it, and instantly change the intervals at which the fans switch. again, i used chatgpt to help me integrate the code with my main code, and here is the html used and edited
-    </pre>
+    </p>
     <pre><code class="language-arduino">
       // HTML page for user to set interval
       const char index_html[] PROGMEM = R"rawliteral(

@@ -40,13 +40,13 @@
       We decided to stick close to the example plotter shown to us in class, and stuck mostly to the kit of parts. our plotter had 2 stepper motors and one servo for the end effector, and 2 belts for the x-y motion mounted onto two metal rails, with 3d printed structural parts. the two stepper motors acted as the pulleys for the belt systems. we ran into a lot of issues with belt tension and also just the mechanics, and ensuring that everything was structurally secure but clean enough to allow full movement. for the end effector, one late night in the lab, we decided to use a paint brush along with the canvas element on the websocket to make - pixelcasso!
     </p>
     <p>
-      <img src="paint.jpeg" width="500">
+      <img src="paint.jpeg" width="500" height="550">
     </p> 
     <p>
       a board was cnc'd to rest the machine and paper on, and also have little pots to put the paint on, all within the movement area of the machine. homing switches were added to the end of the two rails so that when the motors hit them, they would stop their movement. 
     </p>
     <p>
-      <img src="final.gif" width="500">
+      <img src="final.gif" width="500" height="650">
     </p>
     <p>
       here are snippets of our homing code:
@@ -173,7 +173,7 @@
       }
     </code></pre>
     <p>
-      <img src="screen.gif" width="500">
+      <img src="screen.gif" width="500" height="600">
     </p>
     <p>
       we then also used chatgpt to combine the html, machine code, and drawing code, as 3 different members of the team had worked on each. overall the code implemented quite well! however, there were some issues with memory, and the machine could not handle drawings that had a large area or that were too complex. the code to include the paint squares on the physical board on the canvas element also did not work out, so one of our members had to memorize where the spot was on the canvas element for our demo.
@@ -182,7 +182,7 @@
       <img src="star.gif" width="500">
     </p>
     <p>
-      this was our html code:
+      this was our html code and what our websocket looked like:
     </p>
     <pre><code class="language-arduino">
       const char index_html[] PROGMEM = R"rawliteral(
