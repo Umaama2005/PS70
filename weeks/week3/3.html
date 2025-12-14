@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>umaama hussain's ps70 documentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"> 
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/arduino-light.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/arduino.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body bgcolor=#000000>
+  <div>
+    <pre>
+      <nav class="navbar navbar-expand-sm navbar-light bg-light">
+        <div style="align-items: left; justify-content:left;" class="container-fluid">
+          <h3 class="nav-title"> week 3 </h3>
+          <div class="navbar-nav">
+            <h4></h4>
+            <h4><a href="https://umaama2005.github.io/PS70/index.html">back to home</a></h4>
+            <h4><a href="https://umaama2005.github.io/PS70/about.html">back to about</a></h4>
+          </div>
+        </div>
+      </nav>
+    </pre>
+  </div>
+
+  <div>
+    <pre style="color:gray">
+# kinetic sculpture
+    </pre>
+    <pre style="color:gray">
+# ---------------------------------
+    </pre>
+    <pre>
+      the kinetic sculpture was a lot of fun but also a lot of trial and error. at first, i wanted to make a carousel-like sculpture. the fusion sketch i made is below.
+    </pre>
+    <p>
+      <img src="attempt.png" width="500">
+    </p>
+    <pre>
+      i also use calipers to measure the coupler on the motor to make some fixtures to fix my dowell to, which would be the central part of the sculpture.
+    </pre>
+    <p>
+      <img src="fix.jpeg" width="500">
+    </p>
+    <pre>
+      after lasercutting and assembling the scultpture - this is roughly where i got to, and it was looking good.
+    </pre>
+    <p>
+      <img src="ks1.jpeg" width="500">
+    </p>
+    <pre>
+      however, i was having issues with the motor speed - the lowest speed was still too fast, and the sculpture was moving too fast for the pieces to be visible. after much trial and error, i gave up on this attempt. after some browsing online, i found out about zoetropes, and so i decided to make a zoetrope instead!  
+    </pre>
+    <iframe src="https://college974.autodesk360.com/shares/public/SH28cd1QT2badd0ea72b359c1ce9f14a7efb?mode=embed" width="640" height="480" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+    <pre>
+      i found an animation strip online and imported it as an svg. i realized that i could not score the strip that the animation was on, because the animation would have to be on one side and the scores on the other side. so, i decided to score the outside by hand using an exacto knife. 
+    </pre>
+    <p>
+      <img src="final.png" width="500">
+    </p>
+    <pre>
+      it was a lot of trial and error to figure out what slit size worked best, and what motor speed worked best. the animation was also not too visible because it was just scored by the lasercutter, so i went over it with a black marker. eventually, i found a good slit size and motor speed - here's what the animation looks like:
+    </pre>
+    <p>
+      <img src="animation.gif" width="500">
+    </p>
+    <pre>
+      there was still a lot of lopsidedness going on, and i was ready to throw in the towel because it was almost 2am. however, my friend who is studying engineering who was with me suggested that i add some extra layers of cardboard along the dowell where it portrudes out of the box, and where it hold the zoetrope - this did wonders to my sculpture and also in affirming my friend that they would make a good engineer. 
+    </pre>
+    <p>
+      <img src="ks2.gif" width="500">
+    </p>
+    <pre>
+      here is the code that i used for the motor:
+    </pre>
+    <pre><code class="language-arduino">
+      const int A1A = 12;  // define pin 12 for A-1A (PWM Speed)
+      const int A1B = 14;  // define pin 14 for A-1B (direction)
+
+      // setting PWM properties
+      const int freq = 5000;
+      const int resolution = 8;
+
+      void setup() {
+        pinMode(A1A, OUTPUT);     // specify these pins as outputs
+        pinMode(A1B, OUTPUT);
+        ledcAttach(A1A, freq, resolution);
+        ledcWrite(A1A, 0);   // start with the motors off 
+        digitalWrite(A1B, LOW);
+      }
+
+      void loop() {
+        // start the motor at a low speed
+        ledcWrite(A1A, 200);
+        digitalWrite(A1B, LOW);
+        delay(5000);
+      }
+    </code></pre>
+  </div>
+
+</body>
+<link rel="stylesheet" href="https://umaama2005.github.io/PS70/style.css">
+
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>umaama hussain's ps70 documentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"> 
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/arduino-light.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/arduino.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body bgcolor=#000000>
+  <div>
+    <pre>
+      <nav class="navbar navbar-expand-sm navbar-light bg-light">
+        <div style="align-items: left; justify-content:left;" class="container-fluid">
+          <h3 class="nav-title"> week 4 </h3>
+          <div class="navbar-nav">
+            <h4></h4>
+            <h4><a href="https://umaama2005.github.io/PS70/index.html">back to home</a></h4>
+            <h4><a href="https://umaama2005.github.io/PS70/about.html">back to about</a></h4>
+          </div>
+        </div>
+      </nav>
+    </pre>
+  </div>
+
+  <div>
+    <pre style="color:gray">
+# microcontroller programming 
+    </pre>
+    <pre style="color:gray">
+# ---------------------------------
+    </pre>
+    <pre>
+      in class, we learnt how to use a switch with an led to switch it on and off using a microcontroller, which was a cool skill to learn!
+    </pre>
+    <p>
+      <img src="bulb.gif" width="500">
+    </p>
+  </div>
+
+  <div>
+    <pre style="color:gray">
+# arduino 
+    </pre>
+    <pre style="color:gray">
+# ---------------------------------
+    </pre>
+    <pre>
+      i programmed an arduino to control all the components of my main circuit for my final project. i had two circuits - one that used 4 SRD-05VDC-SL-C relays to switch on an aerial fan, the two fans on my exchangers, and a heater. 
+    </pre>
+    <p>
+      <img src="fan_circuit.png" width="500">
+    </p>
+    <pre>
+    	the other circuit was to collect data from 6 DHT-22 sensors.
+    <p>
+      <img src="sensor_circuit.png" width="500">
+    </p>
+    <pre>
+      i wrote some basic code to check that the relays could switch their loads on and off, and the arduino could read the sensor readings. here is the loop function in the code that i used:
+    </pre>
+    <pre><code class="language-arduino">
+      Serial.println("Turning all relays ON");
+	  digitalWrite(relayPin1, LOW);                 
+	  digitalWrite(relayPin2, LOW); 
+	  digitalWrite(relayPin3, LOW); 
+	  digitalWrite(relayPin4, LOW); 
+	  delay(4000);  
+
+	  Serial.println("Turning all relays OFF");
+	  digitalWrite(relayPin1, HIGH);                  
+	  digitalWrite(relayPin2, HIGH); 
+	  digitalWrite(relayPin3, HIGH); 
+	  digitalWrite(relayPin4, HIGH); 
+	  delay(4000);
+
+	  // Sensor readings
+	  printSensorData("Sensor1", dht1);
+	  printSensorData("Sensor2", dht2);
+	  printSensorData("Sensor3", dht3);
+	  printSensorData("Sensor4", dht4);
+	  printSensorData("Sensor5", dht5);
+	  printSensorData("Sensor6", dht6);
+
+	  delay(2000);
+    </code></pre>
+    <pre>
+    	this is the function i used to print the sensor data:
+    </pre>
+    <pre><code class="language-arduino">
+     	void printSensorData(const char* label, DHT &sensor) {
+		  float h = sensor.readHumidity();
+		  float t = sensor.readTemperature();
+
+		  if (isnan(h) || isnan(t)) {
+		    Serial.print(label);
+		    Serial.println(": Failed to read");
+		  } else {
+		    Serial.print(label);
+		    Serial.print(": ");
+		    Serial.print(t);
+		    Serial.print(" °C, ");
+		    Serial.print(h);
+		    Serial.println(" %");
+		  }
+		}
+    </code></pre>
+    <pre>
+    	since my model was in my lab, and not at the makerspace (and it wouldn't have fit in the photobooth), here is a short video showing the fans switching on and off due to the relays. 
+    <p>
+      <img src="fan_vid.gif" width="500">
+    </p>
+  </div>
+
+</body>
+<link rel="stylesheet" href="https://umaama2005.github.io/PS70/style.css">
+
+</html>
